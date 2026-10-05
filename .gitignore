@@ -41,3 +41,7 @@ yarn-error.log*
 *.sw?
 .DS_Store
 Thumbs.db
+
+# Documentation & PDF files
+*.md
+*.pdf
