@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+Frontend/node_modules/
+.pnp
+.pnp.js
+
+# Production build outputs
+dist/
+Frontend/dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+Backend/__pycache__/
+Backend/routers/__pycache__/
+Backend/services/__pycache__/
+*.db
+*.sqlite3
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor & OS files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
