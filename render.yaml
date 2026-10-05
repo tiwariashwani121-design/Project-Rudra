@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: project-rudra-backend
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r Backend/requirements.txt"
+    startCommand: "python -m uvicorn Backend.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PYTHONPATH
+        value: "."
+      - key: DISABLE_SQLALCHEMY_CEXT
+        value: "1"
