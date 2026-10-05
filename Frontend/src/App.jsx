@@ -11,6 +11,7 @@ import IndentModal from './components/IndentModal';
 import WeatherForecastWidget from './components/WeatherForecastWidget';
 import SystemGuideModal from './components/SystemGuideModal';
 import { TRANSLATIONS, getTranslator } from './locales/translations';
+import { getApiUrl, getWsUrl } from './api';
 import { 
   LayoutDashboard, 
   Map as MapIcon, 
@@ -80,9 +81,9 @@ export default function App() {
   const fetchAllData = async () => {
     try {
       const [nodesRes, passesRes, auditRes] = await Promise.all([
-        fetch('/api/v1/nodes/health'),
-        fetch('/api/v1/passes'),
-        fetch('/api/v1/security/audit-chain/verify')
+        fetch(getApiUrl('/api/v1/nodes/health')),
+        fetch(getApiUrl('/api/v1/passes')),
+        fetch(getApiUrl('/api/v1/security/audit-chain/verify'))
       ]);
 
       if (nodesRes.ok) {
@@ -105,7 +106,7 @@ export default function App() {
   // Route Solver
   const fetchOptimizedRoute = async (blockedList = []) => {
     try {
-      const res = await fetch('/api/v1/routes/optimize', {
+      const res = await fetch(getApiUrl('/api/v1/routes/optimize'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -134,8 +135,7 @@ export default function App() {
     let pollInterval;
 
     const connectWebSocket = () => {
-      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `${wsProtocol}//${window.location.host}/ws/telemetry`;
+      const wsUrl = getWsUrl('/ws/telemetry');
 
       try {
         ws = new WebSocket(wsUrl);
@@ -157,7 +157,7 @@ export default function App() {
       if (!pollInterval) {
         pollInterval = setInterval(async () => {
           try {
-            const res = await fetch('/api/v1/telemetry/live');
+            const res = await fetch(getApiUrl('/api/v1/telemetry/live'));
             if (res.ok) {
               const data = await res.json();
               setConvoyTelemetry(data);
@@ -179,7 +179,7 @@ export default function App() {
   const handleTogglePass = async (passId, newBlockedState) => {
     playTacticalSound(newBlockedState ? 340 : 880, 'triangle', 0.25);
     try {
-      const res = await fetch('/api/v1/passes/toggle', {
+      const res = await fetch(getApiUrl('/api/v1/passes/toggle'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -204,7 +204,7 @@ export default function App() {
     playTacticalSound(620, 'sine', 0.1);
     setThreatLevel(newThreat);
     try {
-      await fetch(`/api/v1/admin/threat-level?threat_level=${newThreat}`, { method: 'POST' });
+      await fetch(getApiUrl(`/api/v1/admin/threat-level?threat_level=${newThreat}`), { method: 'POST' });
       await fetchAllData();
     } catch (err) {
       console.error(err);
@@ -216,7 +216,7 @@ export default function App() {
     const nextSpoofState = !convoyTelemetry?.is_spoofed;
     playTacticalSound(nextSpoofState ? 220 : 660, 'sawtooth', 0.3);
     try {
-      await fetch('/api/v1/telemetry/simulate-spoof', {
+      await fetch(getApiUrl('/api/v1/telemetry/simulate-spoof'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getApiUrl } from '../api';
 import { 
   Send, 
   Truck, 
@@ -24,7 +25,7 @@ export default function IndentModal({ node, onClose, onAuthorized, t }) {
   const handleAuthorize = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/v1/nodes/indents/authorize', {
+      const res = await fetch(getApiUrl('/api/v1/nodes/indents/authorize'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

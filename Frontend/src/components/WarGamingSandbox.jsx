@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../api';
 import { 
   Sliders, 
   Play, 
@@ -23,7 +24,7 @@ export default function WarGamingSandbox({ targetNodes = [], t }) {
   const runSimulation = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/v1/wargame/simulate', {
+      const res = await fetch(getApiUrl('/api/v1/wargame/simulate'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

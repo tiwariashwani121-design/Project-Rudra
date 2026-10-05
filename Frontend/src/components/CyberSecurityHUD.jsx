@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../api';
 import { 
   ShieldCheck, 
   ShieldAlert, 
@@ -24,8 +25,8 @@ export default function CyberSecurityHUD({ onClose, t }) {
     setLoading(true);
     try {
       const [verRes, entriesRes] = await Promise.all([
-        fetch('/api/v1/security/audit-chain/verify'),
-        fetch('/api/v1/security/audit-chain/entries')
+        fetch(getApiUrl('/api/v1/security/audit-chain/verify')),
+        fetch(getApiUrl('/api/v1/security/audit-chain/entries'))
       ]);
 
       if (verRes.ok) {
@@ -49,7 +50,7 @@ export default function CyberSecurityHUD({ onClose, t }) {
 
   const handleSimulateTamper = async () => {
     try {
-      const res = await fetch('/api/v1/security/audit-chain/simulate-tamper', { method: 'POST' });
+      const res = await fetch(getApiUrl('/api/v1/security/audit-chain/simulate-tamper'), { method: 'POST' });
       const data = await res.json();
       setActionMessage(`⚠️ ${data.message}`);
       await fetchAuditData();
@@ -60,7 +61,7 @@ export default function CyberSecurityHUD({ onClose, t }) {
 
   const handleRepairChain = async () => {
     try {
-      const res = await fetch('/api/v1/security/audit-chain/repair', { method: 'POST' });
+      const res = await fetch(getApiUrl('/api/v1/security/audit-chain/repair'), { method: 'POST' });
       const data = await res.json();
       setActionMessage(`✅ ${data.message}`);
       await fetchAuditData();

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../api';
 import { 
   CloudSnow, 
   Wind, 
@@ -23,8 +24,8 @@ export default function WeatherForecastWidget({ t, onBlizzardTriggered }) {
   const fetchWeather = async () => {
     try {
       const [currRes, foreRes] = await Promise.all([
-        fetch('/api/v1/weather/current'),
-        fetch(`/api/v1/weather/forecast?location_id=${selectedLocation}&days=7`)
+        fetch(getApiUrl('/api/v1/weather/current')),
+        fetch(getApiUrl(`/api/v1/weather/forecast?location_id=${selectedLocation}&days=7`))
       ]);
       if (currRes.ok) {
         const curr = await currRes.json();
@@ -49,7 +50,7 @@ export default function WeatherForecastWidget({ t, onBlizzardTriggered }) {
     const nextState = !isBlizzardActive;
     setIsBlizzardActive(nextState);
     try {
-      const res = await fetch('/api/v1/weather/simulate-blizzard', {
+      const res = await fetch(getApiUrl('/api/v1/weather/simulate-blizzard'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

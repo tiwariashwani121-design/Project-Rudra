@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../api';
 import { 
   Settings, 
   Flame, 
@@ -25,7 +26,7 @@ export default function MasterAdminConsole({ onRefreshData, t }) {
 
   const fetchParams = async () => {
     try {
-      const res = await fetch('/api/v1/admin/parameters');
+      const res = await fetch(getApiUrl('/api/v1/admin/parameters'));
       if (res.ok) {
         const data = await res.json();
         setParams(data);
@@ -43,7 +44,7 @@ export default function MasterAdminConsole({ onRefreshData, t }) {
 
   const handleUpdateParameter = async (name, value, justification) => {
     try {
-      const res = await fetch('/api/v1/admin/overrides/parameter', {
+      const res = await fetch(getApiUrl('/api/v1/admin/overrides/parameter'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -67,7 +68,7 @@ export default function MasterAdminConsole({ onRefreshData, t }) {
   const handleInjectStock = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/v1/admin/inventory/inject', {
+      const res = await fetch(getApiUrl('/api/v1/admin/inventory/inject'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
